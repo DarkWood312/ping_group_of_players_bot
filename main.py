@@ -90,8 +90,14 @@ async def group(message: Message, state: FSMContext):
 
 @dp.message_handler(state=Nickname.setnick)
 async def state_Nickname_setnick(message: Message, state: FSMContext):
-    if message.text in ['Изменить ник☢️', 'Пинг | Созыв☎️', 'Выбор группы👨‍👨‍👧‍👦']:
+    if message.text == 'Изменить ник☢️':
         await set_nickname(message, state)
+        return
+    elif message.text == 'Пинг | Созыв☎️':
+        await ping(message, state)
+        return
+    elif message.text == 'Выбор группы👨‍👨‍👧‍👦':
+        await group(message, state)
         return
     data = await state.get_data()
     old_nick = data['old_nick']
