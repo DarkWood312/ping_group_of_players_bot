@@ -217,6 +217,8 @@ async def other_messages(message: Message, state: FSMContext):
         await message.answer('жоска')
     elif 'блять' in low:
         await message.answer('кто, ты?')
+    elif 'да' in low:
+        await message.answer('пизда')
     # 300
     elif low == '300' or low == 'триста':
         await message.answer('отсоси у тракториста')
