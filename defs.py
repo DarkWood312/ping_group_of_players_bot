@@ -29,4 +29,4 @@ async def transform_into_user_groups():
 async def get_name_and_nickname(user_id):
     user_name = await sql.get_data(user_id, 'user_name')
     nickname = await sql.get_data(user_id, 'nickname')
-    return f'''<a href="tg://user?id={user_id}">{user_name} {f"<i>({nickname})</i>" if nickname is not None else ""}</a>'''
+    return f'''<a href="tg://user?id={user_id}">{f"<i>{nickname}</i>" if nickname is not None else f"{user_name}"}</a>'''

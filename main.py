@@ -55,8 +55,8 @@ async def set_nickname(message: Message, state: FSMContext):
     await message.answer(
         text=f"""Введите новый ник: \n{f"Текущий: '{hcode(old_nick)}'" if old_nick is not None else ''}""",
         reply_markup=markup, parse_mode=ParseMode.HTML)
-    await Nickname.setnick.set()
     await state.update_data(old_nick=old_nick)
+    await Nickname.setnick.set()
 
 
 @dp.message_handler(commands=['ping'], state='*')
@@ -70,14 +70,14 @@ async def ping(message: Message, state: FSMContext):
             continue
         button = InlineKeyboardButton(string.capwords(group[0]), callback_data=group[0])
         markup.row(button)
-        line = f"""<i>{string.capwords(group[0])}:</i>  """
+        line = f"""<u>{string.capwords(group[0])}</u>:  """
         for user in group[1]:
             if user == message.from_user.id:
                 continue
             line = line + f'{await get_name_and_nickname(user)}, '
         line = line[:-2] + '\n'
         lines.append(line)
-    await message.answer(text='<b>Пользователи в группах:</b>\n' + ''.join(lines) + '\n<b>Доступные группы для пинга:</b>', reply_markup=markup, parse_mode=ParseMode.HTML)
+    await message.answer(text='<b>Пользователи в группах:</b>\n' + '\n'.join(lines) + '\n<b>Доступные группы для пинга:</b>', reply_markup=markup, parse_mode=ParseMode.HTML)
     await Ping.selecting.set()
 
 
@@ -98,6 +98,9 @@ async def state_Nickname_setnick(message: Message, state: FSMContext):
         return
     elif message.text == 'Выбор группы👨‍👨‍👧‍👦':
         await group(message, state)
+        return
+    if len(message.text) > 18:
+        await message.answer(f'Длина ника не может превышать 18 символов! У вас --> {len(message.text)}')
         return
     data = await state.get_data()
     old_nick = data['old_nick']
